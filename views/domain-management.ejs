@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #343a40;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .badge {
+            font-size: 0.875rem;
+        }
+        /* Mobile specific styles */
+        @media (max-width: 767.98px) {
+            .list-group-item {
+                display: flex;
+                flex-direction: column;
+            }
+            .list-group-item .badge {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <%- include('partials/header', { title: 'Domain Management', pageHeading: 'Manage Your Domains' }) %>
+
+    <div class="container">
+        <div class="row">
+            <!-- Domains Expiring Within One Week -->
+            <div class="col-md-6 mb-6">
+                <div class="card">
+                    <div class="card-header bg-danger text-light">
+                        Domains Expiring in One Week
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <% if (domainsOneWeek && domainsOneWeek.length > 0) { %>
+                                <% domainsOneWeek.forEach(function(domain) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span><%= domain.domain_name %></span>
+                                        <span class="badge bg-danger text-light">
+                                            Expiring on: 
+                                            <% if (domain.next_renewal_date) { %>
+                                                <%= new Date(domain.next_renewal_date).toDateString() %>
+                                                <% 
+                                                    // Calculate days remaining
+                                                    const today = new Date();
+                                                    const expirationDate = new Date(domain.next_renewal_date);
+                                                    const timeDiff = expirationDate - today;
+                                                    const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                                                %>
+                                                <br><span class="badge bg-light text-dark mt-2">Days remaining: <%= daysRemaining %></span>
+                                            <% } else { %>
+                                                Date not available
+                                            <% } %>
+                                        </span>
+                                    </li>
+                                <% }); %>
+                            <% } else { %>
+                                <li class="list-group-item">No domains expiring in the next week.</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domains Expiring Within Two Weeks -->
+            <div class="col-md-6 mb-6 mt-5 mt-lg-0 mt-md-0">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        Domains Expiring in Two Weeks
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <% if (domainsTwoWeeks && domainsTwoWeeks.length > 0) { %>
+                                <% domainsTwoWeeks.forEach(function(domain) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span><%= domain.domain_name %></span>
+                                        <span class="badge bg-warning text-dark">
+                                            Expiring on: 
+                                            <% if (domain.next_renewal_date) { %>
+                                                <%= new Date(domain.next_renewal_date).toDateString() %>
+                                                <% 
+                                                    // Calculate days remaining
+                                                    const today = new Date();
+                                                    const expirationDate = new Date(domain.next_renewal_date);
+                                                    const timeDiff = expirationDate - today;
+                                                    const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                                                %>
+                                                <br><span class="badge bg-light text-dark mt-2">Days remaining: <%= daysRemaining %></span>
+                                            <% } else { %>
+                                                Date not available
+                                            <% } %>
+                                        </span>
+                                    </li>
+                                <% }); %>
+                            <% } else { %>
+                                <li class="list-group-item">No domains expiring in the next two weeks.</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domains Expiring Within One Month -->
+            <div class="col-md-12 mb-12 mt-5 mb-5">
+                <div class="card">
+                    <div class="card-header bg-primary text-light">
+                        Domains Expiring in One Month
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <% if (domainsOneMonth && domainsOneMonth.length > 0) { %>
+                                <% domainsOneMonth.forEach(function(domain) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span><%= domain.domain_name %></span>
+                                        <span class="badge bg-primary text-light">
+                                            Expiring on: 
+                                            <% if (domain.next_renewal_date) { %>
+                                                <%= new Date(domain.next_renewal_date).toDateString() %>
+                                                <% 
+                                                    // Calculate days remaining
+                                                    const today = new Date();
+                                                    const expirationDate = new Date(domain.next_renewal_date);
+                                                    const timeDiff = expirationDate - today;
+                                                    const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                                                %>
+                                                <br><span class="badge bg-light text-dark mt-2">Days remaining: <%= daysRemaining %></span>
+                                            <% } else { %>
+                                                Date not available
+                                            <% } %>
+                                        </span>
+                                    </li>
+                                <% }); %>
+                            <% } else { %>
+                                <li class="list-group-item">No domains expiring in the next month.</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Domains Section -->
+        <section class="section-padding bg-light mb-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="text-center mb-4">
+                            <h1 class="display-4 mb-3">Manage Your Domains</h1>
+                            <p class="lead mb-4">Add new domains and update domain details using the options below.</p>
+                        </div>
+                        <div class="card card-custom text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Domain Management</h5>
+                                <a href="/add-domain" class="btn btn-primary btn-lg mt-3">Add New Domain</a>
+                                <!-- Edit functionality -->
+                                <a href="/edit-domain" class="btn btn-secondary btn-lg mt-3 ms-0 ms-lg-3">Edit Domain</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

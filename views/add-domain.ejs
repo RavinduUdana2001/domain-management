@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Add New Domain</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Add New Domain</h1>
+        <form action="/submit-domain" method="POST">
+            <div class="row">
+                <!-- Domain Name -->
+                <div class="col-md-6 mb-3">
+                    <label for="domainName" class="form-label">Domain Name</label>
+                    <input type="text" class="form-control" id="domainName" name="domainName" required>
+                </div>
+
+                <!-- Domain Type -->
+                <div class="col-md-6 mb-3">
+                    <label for="domainType" class="form-label">Domain Type</label>
+                    <select class="form-select" id="domainType" name="domainType" required>
+                        <option value="">Select Domain Type</option>
+                        <option value="generic">Generic</option>
+                        <option value="country-code">Country Code</option>
+                        <option value="sponsored">Sponsored</option>
+                    </select>
+                </div>
+
+                <!-- Company -->
+                <div class="col-md-6 mb-3">
+                    <label for="company" class="form-label">Company</label>
+                    <input type="text" class="form-control" id="company" name="company" required>
+                </div>
+
+                <!-- Register Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="registerDate" class="form-label">Registration Date</label>
+                    <input type="date" class="form-control" id="registerDate" name="registerDate" required>
+                </div>
+
+                <!-- Next Renewal Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="renewalDate" class="form-label">Next Renewal Date</label>
+                    <input type="date" class="form-control" id="renewalDate" name="renewalDate" required>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+
+                <!-- Hosting Type -->
+                <div class="col-md-6 mb-3">
+                    <label for="hostingType" class="form-label">Hosting Type</label>
+                    <select class="form-select" id="hostingType" name="hostingType" required>
+                        <option value="">Select Hosting Type</option>
+                        <option value="shared">Shared Hosting</option>
+                        <option value="dedicated">Dedicated Hosting</option>
+                        <option value="vps">VPS Hosting</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/domain-management" class="btn btn-secondary ms-2">Back to Domain Management</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

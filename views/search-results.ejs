@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1><%= title %></h1>
+    <form action="/search-domain" method="GET">
+        <input type="text" name="query" placeholder="Search for domains" value="<%= query %>" required>
+        <button type="submit">Search</button>
+    </form>
+    
+    <% if (domains.length > 0) { %>
+        <ul>
+            <% domains.forEach(domain => { %>
+                <li>
+                    <strong>Domain Name:</strong> <%= domain.domain_name %><br>
+                    <strong>Company:</strong> <%= domain.company %><br>
+                    <strong>Next Renewal Date:</strong> <%= domain.next_renewal_date %><br>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No domains found matching your query.</p>
+    <% } %>
+</body>
+</html>

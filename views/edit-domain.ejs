@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Domain</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Edit Domain</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <!-- Search Form -->
+                <form id="searchForm" class="form-inline justify-content-center mb-4">
+                    <div class="form-group mr-2">
+                        <label for="searchDomain" class="sr-only">Search Domain Name:</label>
+                        <input type="text" class="form-control" id="searchDomain" name="searchDomain" placeholder="Enter domain name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+                <!-- Edit Form -->
+                <form id="editForm" style="display: none;">
+                    <div class="form-group mb-3">
+                        <label for="domainName">Domain Name:</label>
+                        <input type="text" class="form-control" id="domainName" name="domainName" readonly>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="domainType">Domain Type:</label>
+                        <select class="form-control" id="domainType" name="domainType">
+                            <option value="">Select Domain Type</option>
+                            <option value="generic">Generic</option>
+                            <option value="country-code">Country Code</option>
+                            <option value="sponsored">Sponsored</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="company">Company:</label>
+                        <input type="text" class="form-control" id="company" name="company">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="registerDate">Register Date:</label>
+                        <input type="date" class="form-control" id="registerDate" name="registerDate">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="renewalDate">Next Renewal Date:</label>
+                        <input type="date" class="form-control" id="renewalDate" name="renewalDate">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="status">Status:</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="">Select Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Expired</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="hostingType">Hosting Type:</label>
+                        <select class="form-control" id="hostingType" name="hostingType">
+                            <option value="">Select Hosting Type</option>
+                            <option value="shared">Shared Hosting</option>
+                            <option value="dedicated">Dedicated Hosting</option>
+                            <option value="vps">VPS Hosting</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Update Domain</button>
+                </form>
+
+                <!-- Back to Domain Management Button -->
+                <div class="text-center mt-4">
+                    <a href="/domain-management" class="btn btn-secondary">Back to Domain Management</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.getElementById('searchForm');
+    const editForm = document.getElementById('editForm');
+
+    searchForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const searchDomain = document.getElementById('searchDomain').value;
+
+        fetch(`/search-domain?domainName=${encodeURIComponent(searchDomain)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.domain_name) {
+                    editForm.style.display = 'block';
+
+                    document.getElementById('domainName').value = data.domain_name;
+                    document.getElementById('domainType').value = data.domain_type;
+                    document.getElementById('company').value = data.company;
+                    document.getElementById('registerDate').value = data.register_date.split('T')[0];
+                    document.getElementById('renewalDate').value = data.next_renewal_date.split('T')[0];
+                    document.getElementById('status').value = data.status;
+                    document.getElementById('hostingType').value = data.hosting_type;
+                } else {
+                    alert('Domain not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                alert('An error occurred while searching for the domain');
+            });
+    });
+
+    editForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const updatedData = {
+            domainName: document.getElementById('domainName').value,
+            domainType: document.getElementById('domainType').value,
+            company: document.getElementById('company').value,
+            registerDate: document.getElementById('registerDate').value,
+            renewalDate: document.getElementById('renewalDate').value,
+            status: document.getElementById('status').value,
+            hostingType: document.getElementById('hostingType').value,
+        };
+
+        fetch('/update-domain', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Domain updated successfully!');
+                editForm.reset();
+                editForm.style.display = 'none';
+            } else {
+                alert('Failed to update domain');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            alert('An error occurred while updating the domain');
+        });
+    });
+});
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/edit-domain.js"></script>
+
+</body>
+
+</html>
